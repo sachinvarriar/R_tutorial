@@ -49,7 +49,14 @@ mode<-function(x){
 ```
 
 ```{r}
-mode(iris$Sepal.Width)
+mode_new<-function(x){
+  names(sort(table(x),decreasing = T))[1]
+}
+```
+
+```{r}
+mode(iris$Sepal.Length)
+mode_new(iris$Sepal.Length)
 ```
 we can also understand the spread of the data by looking at the standard deviation, variance, range or IQR
 ```{r}
