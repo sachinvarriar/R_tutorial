@@ -3,7 +3,9 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-Let's import the iris dataset and explore it
+HW: Each team will submit their analysis of the "trees" data set by 23/01/2021 
+
+Let's import the iris data set and explore it
 
 ```{r}
 data(iris)
@@ -85,6 +87,11 @@ We can also get only the descriptives by using the .stats procedure
 ```{r}
 boxplot.stats(iris$Sepal.Width)
 ```
+
+```{r}
+plot(iris$Species)
+```
+
 
 ```{r}
 plot(iris$Species,iris$Sepal.Length)
