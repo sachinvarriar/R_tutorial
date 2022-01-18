@@ -9,6 +9,7 @@ Let's import the iris dataset and explore it
 data(iris)
 ```
 
+we will first try to understand the structure of the data
 ```{r}
 head(iris)
 dim(iris)
@@ -18,11 +19,11 @@ We notice that the iris data has 5 columns and 150 observations/rows
 ```{r}
 colnames(iris)
 ```
-
+Let us look at some summary statistics
 ```{r}
 summary(iris)
 ```
-
+Another way of deriving these summary statistics is to do it one after the other using dedicated functions.
 ```{r}
 min(iris$Sepal.Length)
 quantile(iris$Sepal.Length,probs=0.25)
@@ -31,10 +32,33 @@ mean(iris$Sepal.Length)
 quantile(iris$Sepal.Length,probs=0.75)
 max(iris$Sepal.Length)
 ```
+Here we notice that mode is not present in the summary. How do we compute mode? 
+
+R does not give a predefined  mode function. hence we will write our own procedure 
 ```{r}
 names(sort(-table(iris$Sepal.Length)))[1]
 ```
+or function
 
+```{r}
+mode<-function(x){
+  names(sort(-table(x)))[1]
+}
+```
+
+```{r}
+mode(iris$Sepal.Width)
+```
+we can also understand the spread of the data by looking at the standard deviation, variance, range or IQR
+```{r}
+sd(iris$Sepal.Length)
+var(iris$Sepal.Length)
+range(iris$Sepal.Length)[1]-range(iris$Sepal.Length)[2]
+quantile(iris$Sepal.Length,probs=0.25)-quantile(iris$Sepal.Length,probs=0.75)
+```
+
+
+Now that we have understood what the distribution looks like, we could also try to look at the data in a visual manner
 
 ```{r}
 hist(iris$Sepal.Length)
@@ -51,11 +75,13 @@ hist(iris$Petal.Length)
 ```{r}
 hist(iris$Petal.Width)
 ```
+A boxplot shows the above descriptive stats visually and also shows outliers. An outlier is a point that is < = (Q1 - 1.5 * IQR) or > = (Q3 + 1.5 * IQR)
 
 ```{r}
 boxplot(iris)
 ```
 
+We can also get only the descriptives by using the .stats procedure
 ```{r}
 boxplot.stats(iris$Sepal.Width)
 ```
@@ -75,6 +101,8 @@ plot(iris$Species,iris$Petal.Length)
 ```{r}
 plot(iris$Species,iris$Petal.Width)
 ```
+
+Scatterplots and correlation
 
 ```{r}
 plot(iris$Sepal.Length,iris$Petal.Length)
@@ -96,6 +124,11 @@ plot(setosa$Sepal.Length,setosa$Petal.Length)
 plot(setosa$Sepal.Width,setosa$Petal.Width)
 ```
 
+```{r}
+plot(setosa$Sepal.Width,setosa$Sepal.Length)
+```
+
+Each scatter plot gives a sense of the correlation between two variables but doesn't give a value to it. Also computing each correlation pair for a large data set is a lot of work, hence we use the cor() function
 ```{r}
 cor(setosa[1:4])
 ```
