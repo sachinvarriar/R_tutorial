@@ -13,7 +13,7 @@ data(iris)
 We can make a scatter plot with colors based on a categorical variable
 ```{r}
 ggplot(data = iris) + 
-  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width,color = Species))
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width,color  = Species))
 
 ```
 
@@ -26,6 +26,7 @@ ggplot(data = iris) +
 or even a linear model. More about linear models when we talk about regression
 ```{r}
 ggplot(data = iris) + 
+   geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width,color = Species))+
   geom_smooth(mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species), method = "lm")
 ```
 
@@ -44,7 +45,7 @@ ggplot(data = iris) +
 
 ```
 
-This is the same barplot we saw earlier but with color.
+This is the same bar plot we saw earlier but with color.
 ```{r}
 ggplot(data = iris) + 
   geom_bar(mapping = aes(x = Species, fill=Species))
@@ -52,7 +53,7 @@ ggplot(data = iris) +
 However with ggplot2 you could use alternate aggregations for the y axis
 ```{r}
 ggplot(iris) + 
-  geom_bar(aes(Species, Petal.Length, fill = as.factor(Species)), 
+  geom_bar(aes(Species, Petal.Length, colour = as.factor(Species),fill = as.factor(Species)), 
            position = "dodge", stat = "summary", fun.y = "mean")
 ```
 
@@ -70,7 +71,7 @@ ggplot(data = iris) +
 ```{r}
 ggplot(data = iris) + 
   stat_summary(
-    mapping = aes(x = Species, y = Petal.Length, fill=Species),
+    mapping = aes(x = Species, y = Petal.Length),
     fun.data = "mean_sdl"
   )
 ```

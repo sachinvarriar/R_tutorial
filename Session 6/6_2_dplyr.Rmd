@@ -15,14 +15,32 @@ iris
 
 We can filter rows based on conditions
 ```{r}
-setosa<-iris%>%
+#%>% --- pipe operator#
+setosa<-iris%>% 
   filter(Species=="setosa")
 ```
 
 ```{r}
+setosa
+```
+
+
+```{r}
 not_setosa<-iris%>%
   filter(Species!="setosa")
+print(not_setosa)
 ```
+
+```{r}
+A<-iris%>%
+  filter(Petal.Length>5)
+```
+
+```{r}
+print(A)
+```
+
+
 
 ```{r}
 also_not_setosa<-iris%>%
@@ -46,15 +64,25 @@ iris%>%
 or even derive new variables
 
 ```{r}
-iris%>%
+modified_iris<-iris%>%
   mutate(petal_sepal_ratio=Petal.Length/Sepal.Length)
+```
+
+```{r}
+print(modified_iris)
 ```
 
 or even derive new variables and further summarize them in a step by step manner
 
 ```{r}
+summary(modified_iris)
+```
+
+
+```{r}
 iris%>%
   mutate(petal_sepal_ratio=Petal.Length/Sepal.Length)%>%
+  filter(petal_sepal_ratio>0.3 & petal_sepal_ratio<0.9)%>%
   group_by(Species)%>%
   summarise(avg_ratio=mean(petal_sepal_ratio))
 ```
