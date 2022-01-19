@@ -1,0 +1,63 @@
+---
+title: "6_2_dplyr"
+output: html_document
+---
+
+Now that we have seen how to graphically analyse data. Let us also explore how we can use table manipulations to explore our data better
+```{r}
+library(tidyverse)
+data(iris)
+```
+
+```{r}
+iris
+```
+
+We can filter rows based on conditions
+```{r}
+setosa<-iris%>%
+  filter(Species=="setosa")
+```
+
+```{r}
+not_setosa<-iris%>%
+  filter(Species!="setosa")
+```
+
+```{r}
+also_not_setosa<-iris%>%
+  filter(Species == "versicolor" | Species == "virginica")
+```
+
+We can select only the columns we need
+
+```{r}
+iris%>%
+  select(Species, Petal.Length, Sepal.Length)
+```
+
+And we can also compute summaries for groups/categories
+```{r}
+iris%>%
+  group_by(Species)%>%
+  summarise(Total=sum(Petal.Length), count=n(), avg=mean(Petal.Length), median=median(Petal.Length))
+```
+
+or even derive new variables
+
+```{r}
+iris%>%
+  mutate(petal_sepal_ratio=Petal.Length/Sepal.Length)
+```
+
+or even derive new variables and further summarize them in a step by step manner
+
+```{r}
+iris%>%
+  mutate(petal_sepal_ratio=Petal.Length/Sepal.Length)%>%
+  group_by(Species)%>%
+  summarise(avg_ratio=mean(petal_sepal_ratio))
+```
+
+
+

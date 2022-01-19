@@ -1,0 +1,77 @@
+---
+title: "6__ggplot"
+output: html_notebook
+---
+
+Start by calling the tidyverse library. You will notice below that the tidyverse library has attached multiple packages. Tidyverse is a collection of packages developed by Rstudio that help doing advanced analytics in R.
+
+
+```{r}
+library(tidyverse)
+data(iris)
+```
+We can make a scatter plot with colors based on a categorical variable
+```{r}
+ggplot(data = iris) + 
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width,color = Species))
+
+```
+
+We can fit a exponential smoothing curve for the scatter plot by the categorical variable
+```{r}
+ggplot(data = iris) + 
+  geom_smooth(mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species, linetype= Species))
+```
+
+or even a linear model. More about linear models when we talk about regression
+```{r}
+ggplot(data = iris) + 
+  geom_smooth(mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species), method = "lm")
+```
+
+or combine scatter plot and smoothing curves
+```{r}
+ggplot(data = iris) + 
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width,color = Species))+
+  geom_smooth(mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species, linetype= Species))
+
+```
+
+We can also better represent scatter plots by adding a little white noise to avoid overlap of points
+```{r}
+ggplot(data = iris) + 
+  geom_point(mapping = aes(x = Sepal.Length, y = Sepal.Width,color = Species), position = "jitter")
+
+```
+
+This is the same barplot we saw earlier but with color.
+```{r}
+ggplot(data = iris) + 
+  geom_bar(mapping = aes(x = Species, fill=Species))
+```
+However with ggplot2 you could use alternate aggregations for the y axis
+```{r}
+ggplot(iris) + 
+  geom_bar(aes(Species, Petal.Length, fill = as.factor(Species)), 
+           position = "dodge", stat = "summary", fun.y = "mean")
+```
+
+or you could also plot summary stats
+```{r}
+ggplot(data = iris) + 
+  stat_summary(
+    mapping = aes(x = Species, y = Petal.Length, fill=Species),
+    fun.min = min,
+    fun.max = max,
+    fun = median
+  )
+```
+
+```{r}
+ggplot(data = iris) + 
+  stat_summary(
+    mapping = aes(x = Species, y = Petal.Length, fill=Species),
+    fun.data = "mean_sdl"
+  )
+```
+
