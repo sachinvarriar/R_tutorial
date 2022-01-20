@@ -1,0 +1,141 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(plotly)
+Penguins<-read.csv("penguins_size.csv")
+```
+
+```{r}
+Penguins
+dim(Penguins)
+```
+
+```{r}
+summary(Penguins)
+```
+
+```{r}
+Penguins$species<-as.factor(Penguins$species)
+Penguins$island<-as.factor(Penguins$island)
+#Penguins$sex<-as.factor(Penguins$sex)
+```
+
+```{r}
+summary(Penguins)
+```
+
+```{r}
+Clean_DF<-na.omit(Penguins)
+Clean_DF<-Clean_DF%>%
+  filter(sex == 'FEMALE' | sex == 'MALE')
+```
+
+```{r}
+summary(Clean_DF)
+```
+
+```{r}
+Clean_DF$sex<-as.factor(Clean_DF$sex)
+```
+
+```{r}
+boxplot(Clean_DF[3:5])
+```
+
+```{r}
+boxplot(Clean_DF$body_mass_g)
+```
+
+```{r}
+p<-ggplot(Clean_DF, aes(sex, body_mass_g, fill=sex))+
+  geom_boxplot()
+
+ggplotly(p)
+```
+
+```{r}
+p<-ggplot(Clean_DF, aes(sex, culmen_length_mm, fill=sex))+
+  geom_boxplot()
+
+ggplotly(p)
+```
+
+
+```{r}
+p<-ggplot(Clean_DF, aes(sex, culmen_depth_mm, fill=sex))+
+  geom_boxplot()
+
+ggplotly(p)
+```
+
+```{r}
+p<-ggplot(Clean_DF, aes(sex, flipper_length_mm, fill=sex))+
+  geom_boxplot()
+
+ggplotly(p)
+```
+
+Looking at body measures by Species
+
+```{r}
+p<-ggplot(Clean_DF, aes(species, body_mass_g, fill=species))+
+  geom_boxplot()
+
+ggplotly(p)
+```
+
+```{r}
+p<-ggplot(Clean_DF, aes(species, culmen_length_mm, fill=species))+
+  geom_boxplot()
+
+ggplotly(p)
+```
+
+
+```{r}
+p<-ggplot(Clean_DF, aes(species, culmen_depth_mm, fill=species))+
+  geom_boxplot()
+
+ggplotly(p)
+```
+
+```{r}
+p<-ggplot(Clean_DF, aes(species, flipper_length_mm, fill=species))+
+  geom_boxplot()
+
+ggplotly(p)
+```
+
+```{r}
+p<-ggplot(Clean_DF,aes(species,island, colour=species))+
+  geom_point()+
+  geom_jitter()
+  
+
+ggplotly(p)
+```
+
+```{r}
+p<-ggplot(data = Clean_DF) + 
+  geom_point(mapping = aes(x = culmen_length_mm, y = culmen_depth_mm,color = species, shape=island))
+
+ggplotly(p)
+```
+
+```{r}
+p<-ggplot(data = Clean_DF) + 
+  geom_point(mapping = aes(x = culmen_length_mm, y = flipper_length_mm,color = species, shape=island))
+
+ggplotly(p)
+```
+
+```{r}
+p<-ggplot(data = Clean_DF) + 
+  geom_point(mapping = aes(x = culmen_length_mm, y = body_mass_g, color = species, shape=island))
+
+ggplotly(p)
+```
