@@ -1,7 +1,9 @@
 ---
-title: "R Notebook"
+title: "Penguin Data EDA"
 output: html_notebook
 ---
+
+HW: Label the entire notebook with comments on what operation is each code chunk doing and what is the outcome
 
 ```{r}
 library(tidyverse)
@@ -9,37 +11,46 @@ library(plotly)
 Penguins<-read.csv("penguins_size.csv")
 ```
 
+We see that the data has 344 rows and 7 columns
+
 ```{r}
 Penguins
 dim(Penguins)
 ```
 
+Looking at summary stats
 ```{r}
 summary(Penguins)
 ```
-
+We notice that Species and island are read in as characters. We will convert them to factor.
 ```{r}
 Penguins$species<-as.factor(Penguins$species)
 Penguins$island<-as.factor(Penguins$island)
-#Penguins$sex<-as.factor(Penguins$sex)
+Penguins$sex<-as.factor(Penguins$sex)
 ```
 
+Looking at summary again
 ```{r}
 summary(Penguins)
 ```
-
+We will remove the null values and also any erroneous values for sex  
 ```{r}
 Clean_DF<-na.omit(Penguins)
 Clean_DF<-Clean_DF%>%
   filter(sex == 'FEMALE' | sex == 'MALE')
 ```
 
+This leaves us with the below summary stats:
 ```{r}
 summary(Clean_DF)
 ```
 
 ```{r}
 Clean_DF$sex<-as.factor(Clean_DF$sex)
+```
+
+```{r}
+summary(Clean_DF)
 ```
 
 ```{r}
@@ -111,13 +122,20 @@ ggplotly(p)
 ```
 
 ```{r}
-p<-ggplot(Clean_DF,aes(species,island, colour=species))+
-  geom_point()+
-  geom_jitter()
-  
+p<-ggplot(data = Clean_DF) + 
+  geom_bar(mapping = aes(x = species, fill=species))
 
 ggplotly(p)
 ```
+
+```{r}
+p<-ggplot(data = Clean_DF) + 
+  geom_bar(mapping = aes(x = island, fill=species))
+
+ggplotly(p)
+```
+
+
 
 ```{r}
 p<-ggplot(data = Clean_DF) + 
@@ -139,3 +157,10 @@ p<-ggplot(data = Clean_DF) +
 
 ggplotly(p)
 ```
+
+```{r}
+library(corrplot)
+M<-cor(Clean_DF[3:6])
+corrplot(M,method="color",addCoef.col = "white")
+```
+
