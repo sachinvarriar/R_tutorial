@@ -1,0 +1,52 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+A t-test is a type of inferential statistic used to determine if there is a significant difference between the means of two groups, which may be related in certain features. It is mostly used when the data sets, like the data set recorded as the outcome from flipping a coin 100 times, would follow a normal distribution and may have unknown variances.
+
+A t-test is used as a hypothesis testing tool, which allows testing of an assumption applicable to a population. 
+
+The null hypothesis (H0) is that the true difference between these group means is zero.
+The alternate hypothesis (Ha) is that the true difference is different from zero.
+
+## One Sample T-test
+#### 
+#### The one-sample t-test is a statistical hypothesis test used to determine whether an unknown population mean is different from a specific value
+
+```{r}
+set.seed(80)
+x<-rnorm(100,mean = 5, sd=1)
+t.test(x,mu=5)
+```
+
+## Two Sample T-test
+####
+#### The two-sample t-test is a method used to test whether the unknown population means of two groups are equal or not.
+
+```{r}
+data(sleep)
+print(sleep)
+plot(extra~group, data = sleep)
+t.test(extra ~ group, data = sleep)
+```
+
+
+
+## Paired T-test
+####
+#### The paired t-test is a method used to test whether the mean difference between pairs of measurements is zero or not
+
+```{r}
+# Weight of the mice before treatment
+before <-c(200.1, 190.9, 192.7, 213, 241.4, 196.9, 172.2, 185.5, 205.2, 193.7)
+# Weight of the mice after treatment
+after <-c(392.9, 393.2, 345.1, 393, 434, 427.9, 422, 383.9, 392.3, 352.2)
+
+res <- t.test(before, after, paired = TRUE)
+
+```
+
+```{r}
+res
+```
+
