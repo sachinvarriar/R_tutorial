@@ -1,0 +1,200 @@
+---
+title: "Penguin Data EDA"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+HW: Label the entire notebook with comments on what operation is each code chunk doing and what is the outcome
+
+Reading the penguins dataset
+```{r}
+library(tidyverse)
+library(plotly)
+Penguins<-read.csv("penguins_size.csv")
+```
+
+We see that the data has 344 rows and 7 columns
+
+```{r}
+Penguins
+dim(Penguins)
+```
+
+Looking at summary stats
+```{r}
+summary(Penguins)
+```
+We notice that Species and island are read in as characters. We will convert them to factor.
+```{r}
+Penguins$species<-as.factor(Penguins$species)
+Penguins$island<-as.factor(Penguins$island)
+Penguins$sex<-as.factor(Penguins$sex)
+```
+
+Looking at summary again
+```{r}
+summary(Penguins)
+```
+We will remove the null values and also any erroneous values for sex  
+```{r}
+Clean_DF<-na.omit(Penguins)
+Clean_DF<-Clean_DF%>%
+  filter(sex == 'FEMALE' | sex == 'MALE')
+```
+
+This leaves us with the below summary stats:
+
+
+```{r}
+summary(Clean_DF)
+```
+
+```{r}
+Clean_DF$sex<-as.factor(Clean_DF$sex)
+```
+We observe that there are 3 species 146 Adelie, 68 Chinstrap, 119 Gentoo. 
+These penguins are spread across 3 islands named Biscoe, Dream and Torgersen
+The culmen length of the penguins ranged from 32.10 mm to 59.60 mm and have a average value of 43.99 mm and median value of 44.50 mm
+The culmen depth of the penguins ranged from 13.10 mm to 21.50 mm and have a average value of 17.16 mm and median value of 17.30 mm
+The flipper length of the penguins ranged from 172 mm to 231 mm and have a average value of 201 mm and median value of 197 mm
+The body mass of the penguins ranged from 2700 g to 6300 g and have a average value of 4207 g and median value of 4050 g
+Also there are 165 Female and 168 Male penguins
+```{r}
+summary(Clean_DF)
+```
+We now graphically represent the same summary statistics in a boxplot to also check if there are ouliers.
+There are no outliers in culmen length, culmen depth or flipper length
+
+In case of outliers use boxplot.stats() and describe the outlier values observed in a separate code block
+```{r}
+boxplot(Clean_DF[3:5])
+```
+There are no outliers in body mass either
+```{r}
+boxplot(Clean_DF$body_mass_g)
+```
+We now look at the distribution of the body mass based on sex. There are no outliers however the distributions are different for each sex
+Minimum weight for female is below 3000 g while that for males is above 3000 g. Maximum weight for females is slightly above 5000 while it is above 6000 for males
+The median value for female is between 3000 and 4000 while that of male is between 4000 and 5000
+```{r}
+p<-ggplot(Clean_DF, aes(sex, body_mass_g, fill=sex))+
+  geom_boxplot()
+
+p
+```
+
+We now look at the distribution of the culmen length based on sex. There are no outliers however the distributions are different for each sex
+Minimum value for female is slightly below the minimum value for males, both lie between 30 and 40. Maximum for females and  males are close to 60 but the max for females is slightly lower
+Median for females and  males are close to 45 but the median for females is slightly lower
+
+```{r}
+p<-ggplot(Clean_DF, aes(sex, culmen_length_mm, fill=sex))+
+  geom_boxplot()
+
+p
+```
+
+We now look at the distribution of the culmen depth based on sex. There are no outliers however the distributions are different for each sex
+Minimum value for female is slightly below the minimum value for males, both lie between 12.5 and 15. Maximum for females and  males are greater than 20 but the max for females is slightly lower
+Median for females is below 17.5 and  that of males is above 17.5
+```{r}
+p<-ggplot(Clean_DF, aes(sex, culmen_depth_mm, fill=sex))+
+  geom_boxplot()
+
+p
+```
+We now look at the distribution of the flipper length based on sex. There are no outliers however the distributions are different for each sex
+Minimum value for female is slightly below the minimum value for males, both lie between 170 and 180. Maximum for females and  males are greater than 220 and 230 respectively. Median for females is above 190 and  that of males is above 200
+```{r}
+p<-ggplot(Clean_DF, aes(sex, flipper_length_mm, fill=sex))+
+  geom_boxplot()
+
+p
+```
+
+Looking at body measures by Species
+
+```{r}
+p<-ggplot(Clean_DF, aes(species, body_mass_g, fill=species))+
+  geom_boxplot()
+
+p
+```
+
+```{r}
+p<-ggplot(Clean_DF, aes(species, culmen_length_mm, fill=species))+
+  geom_boxplot()
+
+p
+```
+
+
+```{r}
+p<-ggplot(Clean_DF, aes(species, culmen_depth_mm, fill=species))+
+  geom_boxplot()
+
+p
+```
+
+```{r}
+p<-ggplot(Clean_DF, aes(species, flipper_length_mm, fill=species))+
+  geom_boxplot()
+
+p
+```
+
+```{r}
+p<-ggplot(data = Clean_DF) + 
+  geom_bar(mapping = aes(x = species, fill=species))
+
+p
+```
+We see here that the Adelie species is spread across all islands where as Chinstrap is exclusive to Dream island while Gentoo is exclusive to Biscoe
+```{r}
+p<-ggplot(data = Clean_DF) + 
+  geom_bar(mapping = aes(x = island, fill=species))
+
+p
+```
+
+We observe from the scatterplot that the different species are almost separable based on the length and depth of the culmen. The red points represent Adelie, green point chinstrap and blue Gentoo. Also there is a positive correlation between the two variables within each category
+
+```{r}
+p<-ggplot(data = Clean_DF) + 
+  geom_point(mapping = aes(x = culmen_length_mm, y = culmen_depth_mm,color = species, shape=island))
+
+p
+```
+
+We observe from the scatterplot that the different species are almost separable based on the length of the culmen and flipper. The red points represent Adelie, green point chinstrap and blue Gentoo.
+
+The flipper length is also highly correlated with the culmen length within each category
+
+```{r}
+p<-ggplot(data = Clean_DF) + 
+  geom_point(mapping = aes(x = culmen_length_mm, y = flipper_length_mm,color = species, shape=island))
+
+p
+```
+
+```{r}
+p<-ggplot(data = Clean_DF) + 
+  geom_point(mapping = aes(x = culmen_length_mm, y = body_mass_g, color = species, shape=island))
+
+p
+```
+
+We can observe the actual magnitude of correlation from the plot below. Culmen length and and culmen depth aren't highly correlated, but as seen above they are highly correlated among each species. 
+
+Culmen length is highly correlated with flipper length and body mass and both are positively correlated
+
+Culmen depth is highly correlated with flipper length but is a negative correlation
+
+Flipper length and body mass show high positive correlated
+```{r}
+library(corrplot)
+M<-cor(Clean_DF[3:6])
+corrplot(M,method="color",addCoef.col = "white")
+```
+
