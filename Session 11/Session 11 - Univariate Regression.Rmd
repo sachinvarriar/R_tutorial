@@ -1,0 +1,52 @@
+---
+title: "Univariate Regression on Cars data"
+output:
+  html_document:
+    df_print: paged
+---
+
+You can find a version of this document already knit and published on the cloud here: https://rpubs.com/sachinvarriar/cars_regression
+
+#### alpha - intercept
+#### beta(s) - coefficient(s)
+#### X - independent variable/feature
+#### Y - dependent variable/response
+
+Y=f(X)
+Y is dependent on the value of X. Think of substituting X in the fn f() to obtain Y
+
+```{r}
+data('cars')
+summary(cars)
+```
+lm() stands for linear model. Why linear model? This performs a "linear" regression on the data and gives us the equation of the line that generalizes the relation between Y and X(s)
+
+```{r}
+model<-lm(speed~dist,cars)
+```
+
+```{r}
+print(model)
+```
+Y=8.2839 + 0.1656*dist
+
+```{r}
+plot(cars)
+```
+
+```{r}
+cor(cars)
+```
+
+```{r}
+summary(model)
+```
+Looking at the model, we observe that the F-statistics p value is 1.49*10^-12 which makes it significant in the 99.99% confidence interval or almost 100% confidence interval. Hence we can reject null hypothesis and assume the model is statistically significant
+
+Also, the p-value for t-test on intercept is 1.44*10^-12, which tells us that it is significant in the 99.99% confidence interval. hence the intercept is statistically significant
+
+Also, the p-value for t-test on coeff of dist is 1.49*10^-12, which tells us that it is significant in the 99.99% confidence interval. hence the coefficient is statistically significant
+
+the goodness of fit of the model here is 0.6511 based on multiple R-sq
+
+The resultant equation is Y=8.2839 + 0.1656*dist
