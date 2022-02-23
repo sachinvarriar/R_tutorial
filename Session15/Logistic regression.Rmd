@@ -1,0 +1,78 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+fracture_df<-read.csv("bmd.csv")
+```
+
+```{r}
+head(fracture_df)
+```
+
+```{r}
+fracture_df$sex<-as.factor(fracture_df$sex)
+fracture_df$fracture<-as.factor(fracture_df$fracture)
+fracture_df$medication<-as.factor(fracture_df$medication)
+summary(fracture_df)
+```
+
+We are going to solve for log(p(fractured)/1-p(fractured))
+
+```{r}
+df<-fracture_df[c(2:9)]
+model<-glm(fracture~., data = df, family = binomial)
+```
+
+```{r}
+summary(model)
+```
+
+```{r}
+cor(df[c(1,4,5,7,8)])
+```
+
+```{r}
+model<-glm(fracture~age+bmd+medication+sex, data = df, family = binomial)
+```
+
+```{r}
+summary(model)
+```
+
+```{r}
+model<-glm(fracture~age+bmd+sex, data = df, family = binomial)
+```
+
+```{r}
+summary(model)
+```
+
+```{r}
+model<-glm(fracture~bmd+sex, data = df, family = binomial)
+summary(model)
+```
+
+#### ln(p/1-p) = -10.75 + 16.60*bmd - 0.96*sexM
+bmd=0.75
+M
+```{r}
+y=-10.75 + 16.60*0.75 - 0.96
+```
+
+```{r}
+odds_ratio <- exp(y)
+print(odds_ratio)
+```
+p/1-p = 2.095936
+p=2.095936 - 2.095936p
+p=2.095936/3.095936
+```{r}
+p=2.095936/3.095936
+```
+
+```{r}
+p
+```
+
