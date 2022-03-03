@@ -1,0 +1,120 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+Real.estate <- read.csv("~/Documents/Amrita R course 2022/R_tutorial/Session16/Real estate.csv")
+
+```
+
+```{r}
+head(Real.estate)
+```
+```{r}
+summary(Real.estate)
+```
+
+```{r}
+dim(Real.estate)
+colnames(Real.estate)<-c("No","Date","House_age","Distance_to_Metro","No_convenience_stores","latitude","longitude","price")
+```
+
+```{r}
+smp_size <- floor(0.75 * nrow(Real.estate))
+
+## set the seed to make your partition reproducible
+set.seed(123)
+train_ind <- sample(seq_len(nrow(Real.estate)), size = smp_size)
+
+train <- Real.estate[train_ind, ]
+test <- Real.estate[-train_ind, ]
+```
+
+```{r}
+boxplot(train)
+```
+
+```{r}
+hist(train$Distance_to_Metro)
+```
+
+```{r}
+hist(train$price)
+```
+
+```{r}
+corrplot::corrplot(cor(train))
+```
+
+```{r}
+model<-glm(price~House_age+Distance_to_Metro+No_convenience_stores+latitude+longitude,data=train, family= gaussian)
+```
+
+```{r}
+summary(model)
+```
+
+```{r}
+model<-glm(price~House_age+Distance_to_Metro+No_convenience_stores+latitude,data=train, family= gaussian)
+```
+
+```{r}
+summary(model)
+```
+### Y = -6271-0.211*X1-0.00418*X2+0.0932*X3+252.8*X4 
+
+
+```{r}
+P<-predict(model,test)
+```
+
+```{r}
+test$price_predicted<-P
+```
+
+```{r}
+test$error<-test$price_predicted-test$price
+```
+
+MAPE - Mean absolute percentage error.
+```{r}
+test$abs_error<-abs((test$price_predicted-test$price)/test$price)
+mean(test$abs_error)*100
+```
+RMSE - root mean square error.
+```{r}
+test$square_error<-(test$price_predicted-test$price)^2
+
+sqrt(mean(test$square_error))
+```
+
+```{r}
+train$House_age_sq<-train$House_age^2
+test$House_age_sq<-test$House_age^2
+```
+
+```{r}
+model<-glm(price~House_age+House_age_sq+Distance_to_Metro+No_convenience_stores+latitude,data=train, family= gaussian)
+```
+
+```{r}
+summary(model)
+```
+
+```{r}
+P<-predict(model,test)
+test$price_predicted_quad<-P
+```
+
+```{r}
+test$abs_error_quad<-abs((test$price_predicted_quad-test$price)/test$price)
+mean(test$abs_error_quad)*100
+```
+
+```{r}
+test$square_error_quad<-(test$price_predicted_quad-test$price)^2
+
+sqrt(mean(test$square_error_quad))
+```
+
